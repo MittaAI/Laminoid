@@ -11,6 +11,3 @@ while true; do
     echo "Gunicorn exited. Restarting..."
     sleep 5
 done
-
-
-
