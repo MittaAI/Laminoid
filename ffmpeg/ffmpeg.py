@@ -74,10 +74,9 @@ async def run_ffmpeg(ffmpeg_command, user_directory, callback_url, uid):
     # Add 'ffmpeg' at the beginning of the command
     ffmpeg_command = ['ffmpeg'] + args
 
-    print(f"Executing FFmpeg command in {user_directory}: {' '.join(ffmpeg_command)}")
-
     try:
-        subprocess.run(ffmpeg_command, check=True)
+        subprocess.run(ffmpeg_command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
         await upload_file()
     except subprocess.CalledProcessError as e:
         with open('data.json', 'r') as file:
