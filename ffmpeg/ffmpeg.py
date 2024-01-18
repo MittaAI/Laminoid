@@ -80,7 +80,18 @@ async def run_ffmpeg(ffmpeg_command, user_directory, callback_url, uid):
         subprocess.run(ffmpeg_command, check=True)
         await upload_file()
     except subprocess.CalledProcessError as e:
-        print(f"FFmpeg processing failed: {e}")
+        with open('data.json', 'r') as file:
+            data = json.load(file)
+        callback_url = data.get('callback_url')
+        
+        # Remove data.json after reading
+        os.remove('data.json')
+
+        async with httpx.AsyncClient() as client:
+            with open(output_file, 'rb') as f:
+                data = {'ffmpeg_result': "The request to convert the file failed."}
+                response = await client.post(callback_url, data=data)
+
     finally:
         os.chdir(original_directory)
 
