@@ -88,9 +88,8 @@ async def run_ffmpeg(ffmpeg_command, user_directory, callback_url, uid):
         os.remove('data.json')
 
         async with httpx.AsyncClient() as client:
-            with open(output_file, 'rb') as f:
-                data = {'ffmpeg_result': "The request to convert the file failed."}
-                response = await client.post(callback_url, data=data)
+            data = {'ffmpeg_result': "The request to convert the file failed."}
+            response = await client.post(callback_url, data=data)
 
     finally:
         os.chdir(original_directory)
