@@ -33,12 +33,11 @@ async def convert():
     local_file_path = await download_file(file_url, user_dir)
 
     try:
-	    # Processing with FFmpeg
-	    asyncio.create_task(run_ffmpeg(ffmpeg_command, user_dir, user_dir, uid))
-
-	    return jsonify({'result': 'success'})
-	except:
-		return jsonify({'result': 'failed'})
+        # Processing with FFmpeg
+        asyncio.create_task(run_ffmpeg(ffmpeg_command, user_dir, user_dir, uid))
+        return jsonify({'result': 'success'})
+    except:
+        return jsonify({'result': 'failed'})
 
 async def download_file(url, directory):
     local_filename = secure_filename(os.path.basename(urlparse(url).path))
