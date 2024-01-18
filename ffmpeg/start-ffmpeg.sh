@@ -4,7 +4,7 @@ while true; do
     screen -dmS gunicorn_screen gunicorn -b 0.0.0.0:6969 ffmpeg:app -w 2 --timeout 120
     sleep 1
     
-    while screen -list | grep -q gunicorn_screen; do
+    while screen -list | grep -q gunicorn_ffmpeg; do
         sleep 10
     done
     
