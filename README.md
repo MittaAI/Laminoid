@@ -5,7 +5,7 @@ Laminoid is a stupid simple instance manager for Google Compute to run machine l
 
 Laminoid provides a reverse proxy for "authentication".
 
-This system powers [https://ai.featurebase.com/](https://ai.featurebase.com/), which runs the [SlothAI](https://github.com/FeatureBaseDB/SlothAI) framework for building model pipelines.
+This system powers [https://mitta.ai](https://mitta.ai), which runs the [SlothAI](https://github.com/MittaAI/SlothAI) framework for building model pipelines.
 
 ## Boxes that Run Models
 Laminoid deploys boxes onto Google Cloud. These boxes contain graphics cards, which can run models.
@@ -14,8 +14,6 @@ A controller box is used. It may list, start or stop a box which runs models. Th
 
 ### Instructor Embeddings
 Currently supports [Instructor Large](https://huggingface.co/hkunlp/instructor-large) or [Instructor XL](https://huggingface.co/hkunlp/instructor-xl). Instructor also has a [whitepaper](https://arxiv.org/abs/2212.09741) you can read.
-
-Supports keyterm extraction using a model ensemble. It uses BERT, H2-keywordextractor, and Fasttext.
 
 Subsequent improvements to this repo will add support for other models, like Llama 2.
 
