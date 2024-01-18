@@ -17,8 +17,8 @@ async def convert():
     uid = data.get('uid')
     file_url = data.get('mitta_uri')
     callback_url = data.get('callback_url')
-    ffmpeg_string = data.get('ffmpeg_command')
-    output_file_name = data.get('output_file')
+    ffmpeg_command = data.get('ffmpeg_command')
+    output_file = data.get('output_file')
 
     # Creating user-specific directory
     user_dir = os.path.join("upload", uid)
@@ -33,7 +33,7 @@ async def convert():
     local_file_path = await download_file(file_url, user_dir)
 
     # Processing with FFmpeg
-    asyncio.create_task(run_ffmpeg(ffmpeg_string, user_dir, user_dir, uid))
+    asyncio.create_task(run_ffmpeg(ffmpeg_command, user_dir, user_dir, uid))
 
     return jsonify({'message': 'FFmpeg processing started'})
 
@@ -57,9 +57,9 @@ def is_safe_filename(filename):
     return ".." not in filename and not filename.startswith('/')
 
 
-async def run_ffmpeg(ffmpeg_string, user_directory, callback_url, uid):
+async def run_ffmpeg(ffmpeg_command, user_directory, callback_url, uid):
     # Split the command string into arguments
-    args = shlex.split(ffmpeg_string)
+    args = shlex.split(ffmpeg_command)
 
     # Check if the first argument is 'ffmpeg' and remove it if present
     if args[0] == 'ffmpeg':
@@ -88,19 +88,19 @@ async def upload_file():
     with open('data.json', 'r') as file:
         data = json.load(file)
     callback_url = data.get('callback_url')
-    output_file_name = data.get('output_file_name')
+    output_file = data.get('output_file')
 
     # Remove data.json after reading
     os.remove('data.json')
 
     async with httpx.AsyncClient() as client:
-        with open(output_file_name, 'rb') as f:
-            files = {'file': (os.path.basename(output_file_name), f)}
-            data = {'filename': output_file_name}
+        with open(output_file, 'rb') as f:
+            files = {'file': (os.path.basename(output_file), f)}
+            data = {'filename': output_file}
             response = await client.post(callback_url, files=files, data=data)
 
         # Cleanup
-        os.remove(output_file_name)
+        os.remove(output_file)
 
         if response.status_code != 200:
             print("Failed to upload the file to the callback URL.")
