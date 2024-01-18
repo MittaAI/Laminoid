@@ -17,7 +17,8 @@ async def convert():
     uid = data.get('uid')
     file_url = data.get('mitta_uri')
     callback_url = data.get('callback_url')
-    ffmpeg_string = data.get('ffmpeg_string')
+    ffmpeg_string = data.get('ffmpeg_command')
+    output_file_name = data.get('output_file')
 
     # Creating user-specific directory
     user_dir = os.path.join("upload", uid)
@@ -75,19 +76,19 @@ async def run_ffmpeg(ffmpeg_string, user_directory, callback_url, uid):
 
     try:
         subprocess.run(ffmpeg_command, check=True)
-        output_file_name = "output.jpg"  # Update this based on your expected output
-        await upload_file(output_file_name)
+        await upload_file()
     except subprocess.CalledProcessError as e:
         print(f"FFmpeg processing failed: {e}")
     finally:
         os.chdir(original_directory)
 
 
-async def upload_file(output_file_name):
+async def upload_file():
     # Read callback_url from data.json
     with open('data.json', 'r') as file:
         data = json.load(file)
     callback_url = data.get('callback_url')
+    output_file_name = data.get('output_file_name')
 
     # Remove data.json after reading
     os.remove('data.json')
